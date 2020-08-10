@@ -4,7 +4,7 @@ library(dplyr)
 library(mice)
 library('reshape2')
 
-# Import file using IMPORT DATASET command on top right panel
+# Import file
 file <- read.csv("D:/Data Visualisation/Week 4/Housing Price Prediction/Housing Price prediction.csv")
 
 #View the dataframe
@@ -71,3 +71,30 @@ ggplot(data = melted_corr, aes(Var2, Var1, fill = value))+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, 
                                    size = 12, hjust = 1))+
   coord_fixed()
+
+
+#Remove dependent variable from train set
+Final_data1<-final_data[-1]
+Final_data2<-Final_data1[-25]
+
+# Pricipal Components Analysis (TYPE IN: rotation method)
+pca <- prcomp(Final_data2, scale. = T)
+names(pca)
+pca$rotation[1:3,1:4]
+
+#the matrix x has the principal component score vectors in a 1460 × 24 dimension.
+dim(pca$x)
+
+
+
+#standard deviation of each principal component
+std_dev <- pca$sdev
+#variance
+variance <- std_dev^2
+#divide the variance by sum of total variance -> to compute the proportion of variance explained by each component
+variance_prop <- variance/sum(variance)
+variance_prop[1:10]
+
+#scree plot - the percentage of variance explained by each principal component
+plot(variance_prop, xlab = "Principal Component", ylab = "Proportion of Variance Explained", type = "b", xlim=c(0, 20))
+
